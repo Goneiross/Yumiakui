@@ -1,4 +1,14 @@
 import speech_recognition as sr
+import sys
+
+def analyse(text):
+    if (text.find("exit") != -1 or text.find("quit") != -1):
+        print("Yumiakui: See ya space cow-boy !")
+        sys.exit()
+    elif (text.find("hey") != -1):
+        print("Yumiakui: Aloha Gon")
+    else :
+        print("Yumiakui: I don't understand this ...")
 
 def main():
     r = sr.Recognizer()
@@ -10,6 +20,7 @@ def main():
             try:
                 sentence = r.recognize_google(audio)
                 print("Goneiross: " + sentence)
+                analyse(sentence)
                 pass
             except:
                 print("Goneiross : ERROR Voice unrecognized")
