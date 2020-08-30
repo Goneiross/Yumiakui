@@ -1,5 +1,8 @@
+USER_NAME = "Gon"
+ASSISTANT_NAME = "Yumiakui"
+
 greetings = [
-    "Aloha ",
+    "Aloha",
     "Heyya",
     "Hey",
     "Hello",
@@ -21,4 +24,17 @@ notUnderstood = [
     "I did not catch what you were saying",
     "Could you repeat please ?",
     "I'm sorry, I don't understand"
+]
+
+userName = [
+    USER_NAME,
+    "Sir",
+    "Bro"
+]
+
+askingHowAreYou = [
+    "How are you ?",
+    "How are you doing ?",
+    "Watcha doing ?",
+    "How is today going on ?"
 ]
