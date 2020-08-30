@@ -6,6 +6,8 @@ import random
 from subprocess import Popen
 import threading
 
+from dictionary import *
+
 USER_NAME = "Gon"
 ASSISTANT_NAME = "Yumiakui"
 
@@ -15,7 +17,7 @@ def convertSentenceToWords(text, index):
         words.pop(0)
     return  words
 
-def say (name, text, tts):
+def say(name, text, tts):
     print(name + " : " + text)
     # os.system('/opt/mimic/mimic -t ' + text + ' -voice slt' + ' -o tmp.wav')
     # playsound('tmp.wav')
@@ -53,7 +55,7 @@ def is_greetings(text):
         "greetings"
     ]
     for word in keyword:
-        if (text.find(word) != -1):
+        if ((text.lower()).find(word.lower()) != -1):
             state = True
     return state
 
@@ -67,7 +69,7 @@ def is_leaving(text):
         "see ya"
     ]
     for word in keyword:
-        if (text.find(word) != -1):
+        if ((text.lower()).find(word.lower()) != -1):
             state = True
     return state
 
@@ -79,7 +81,7 @@ def is_openning(text):
         "start"
     ]
     for word in keyword:
-        if (text.find(word) != -1):
+        if ((text.lower()).find(word.lower()) != -1):
             state = True
     return state
 
@@ -87,47 +89,24 @@ def is_computing(text):
     state = False
     keyword = [
         "compute", 
-        "calculate",
-        "Calculate"
+        "calculate"
     ]
     for word in keyword:
-        if (text.find(word) != -1):
+        if ((text.lower()).find(word.lower()) != -1):
             state = True
     return state
 
 def say_greetings(tts):
-    sentences = [
-        "Aloha " + USER_NAME,
-        "Heyya",
-        "Hey",
-        "Hello",
-        "Yo"
-    ]
-    r = random.randrange(0, len(sentences))
-    say(ASSISTANT_NAME, sentences[r], tts)
+    r = random.randrange(0, len(greetings))
+    say(ASSISTANT_NAME, greetings[r], tts)
 
 def say_leaving(tts):
-    sentences = [
-        "See you",
-        "See ya",
-        "See you space-cowboy",
-        "Bye",
-        "Byebye",
-        "See you later",
-        "Later bro"
-    ]
-    r = random.randrange(0, len(sentences))
-    say(ASSISTANT_NAME, sentences[r], tts)
+    r = random.randrange(0, len(leaving))
+    say(ASSISTANT_NAME, leaving[r], tts)
 
 def say_notUnderstood(tts):
-    sentences = [
-        "I don't understand",
-        "I did not catch what you were saying",
-        "Could you repeat please ?",
-        "I'm sorry, I don't understand"
-    ]
-    r = random.randrange(0, len(sentences))
-    say(ASSISTANT_NAME, sentences[r], tts)
+    r = random.randrange(0, len(notUnderstood))
+    say(ASSISTANT_NAME, notUnderstood[r], tts)
 
 def compute(text, tts):
     operators = {
@@ -142,23 +121,23 @@ def compute(text, tts):
     say(ASSISTANT_NAME, "The result is " + str(result), tts)
 
 def open_app(text, tts):
-    if (text.find("code") != -1):
+    if ((text.lower()).find("code") != -1):
         code_thread = threading.Thread(target=open_code)
         code_thread.start()
         say(ASSISTANT_NAME, "Opening Visual Studio Code", tts)
-    elif (text.find("Firefox") != -1):
+    elif ((text.lower()).find("firefox") != -1):
         firefox_thread = threading.Thread(target=open_firefox)
         firefox_thread.start()
         say(ASSISTANT_NAME, "Opening Firefox", tts)
-    elif (text.find("Matlab") != -1):
+    elif ((text.lower()).find("matlab") != -1):
         matlab_thread = threading.Thread(target=open_matlab)
         matlab_thread.start()
         say(ASSISTANT_NAME, "Opening Matlab", tts)
-    elif (text.find("xournal") != -1):
+    elif ((text.lower()).find("xournal") != -1):
         xournal_thread = threading.Thread(target=open_xournal)
         xournal_thread.start()
         say(ASSISTANT_NAME, "Opening Xournal", tts)
-    elif (text.find("Spotify") != -1):
+    elif ((text.lower()).find("spotify") != -1):
         spotify_thread = threading.Thread(target=open_spotify)
         spotify_thread.start()
         say(ASSISTANT_NAME, "Opening Spotify", tts)
