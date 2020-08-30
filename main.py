@@ -8,9 +8,6 @@ import threading
 
 from dictionary import *
 
-USER_NAME = "Gon"
-ASSISTANT_NAME = "Yumiakui"
-
 def convertSentenceToWords(text, index): 
     words = text.split()
     for i in range (0, index):
@@ -97,8 +94,21 @@ def is_computing(text):
     return state
 
 def say_greetings(tts):
+    post = ""
     r = random.randrange(0, len(greetings))
-    say(ASSISTANT_NAME, greetings[r], tts)
+    r2 = random.randrange(0, 2)
+    r3 = random.randrange(0, 4)
+    if (r2 == 0):
+        r2r = random.randrange(0, len(userName))
+        post = ", " + userName[r2r]
+    response = greetings[r] + post
+    say(ASSISTANT_NAME, response, tts)
+    if (r3  == 0):
+        say_askingHowAreYou(tts)
+
+def say_askingHowAreYou(tts):
+    r = random.randrange(0, len(askingHowAreYou))
+    say(ASSISTANT_NAME, askingHowAreYou[r], tts)
 
 def say_leaving(tts):
     r = random.randrange(0, len(leaving))
