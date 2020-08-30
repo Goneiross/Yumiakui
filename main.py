@@ -6,6 +6,9 @@ import random
 from subprocess import Popen
 import threading
 
+USER_NAME = "Gon"
+ASSISTANT_NAME = "Yumiakui"
+
 def convertSentenceToWords(text, index): 
     words = text.split()
     for i in range (0, index):
@@ -96,14 +99,14 @@ def is_computing(text):
 
 def say_greetings(tts):
     sentences = [
-        "Aloha Gon",
+        "Aloha " + USER_NAME,
         "Heyya",
         "Hey",
         "Hello",
         "Yo"
     ]
     r = random.randrange(0, len(sentences))
-    say("Yumiakui", sentences[r], tts)
+    say(ASSISTANT_NAME, sentences[r], tts)
 
 def say_leaving(tts):
     sentences = [
@@ -116,7 +119,7 @@ def say_leaving(tts):
         "Later bro"
     ]
     r = random.randrange(0, len(sentences))
-    say("Yumiakui", sentences[r], tts)
+    say(ASSISTANT_NAME, sentences[r], tts)
 
 def say_notUnderstood(tts):
     sentences = [
@@ -126,7 +129,7 @@ def say_notUnderstood(tts):
         "I'm sorry, I don't understand"
     ]
     r = random.randrange(0, len(sentences))
-    say("Yumiakui", sentences[r], tts)
+    say(ASSISTANT_NAME, sentences[r], tts)
 
 def compute(text, tts):
     operators = {
@@ -187,11 +190,11 @@ def main():
             audio = r.listen(source)
             try:
                 sentence = r.recognize_google(audio)
-                print("Goneiross: " + sentence)
+                print(USER_NAME + " : " + sentence)
                 analyse(sentence, tts)
                 pass
             except:
-                print("Goneiross : ERROR Voice unrecognized")
+                print(USER_NAME + " : ERROR Voice unrecognized")
                 pass
 
 if __name__ == "__main__":
