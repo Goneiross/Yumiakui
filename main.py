@@ -6,6 +6,12 @@ import random
 from subprocess import Popen
 import threading
 
+def convertSentenceToWords(text, index): 
+    words = text.split()
+    for i in range (0, index):
+        words.pop(0)
+    return  words
+
 def say (name, text, tts):
     print(name + " : " + text)
     # os.system('/opt/mimic/mimic -t ' + text + ' -voice slt' + ' -o tmp.wav')
@@ -76,6 +82,18 @@ def is_openning(text):
             state = True
     return state
 
+def is_computing(text):
+    state = False
+    keyword = [
+        "compute", 
+        "calculate",
+        "Calculate"
+    ]
+    for word in keyword:
+        if (text.find(word) != -1):
+            state = True
+    return state
+
 def say_greetings(tts):
     sentences = [
         "Aloha Gon",
@@ -110,6 +128,18 @@ def say_notUnderstood(tts):
     r = random.randrange(0, len(sentences))
     say("Yumiakui", sentences[r], tts)
 
+def compute(text, tts):
+    operators = {
+        '-': lambda a, b: a-b,
+        '+': lambda a, b: a+b,
+        '/': lambda a, b: a/b,
+        '*': lambda a, b: a*b 
+    }
+    words = convertSentenceToWords(text, 1)
+    result = operators[words[1]](int(words[0]),int(words[2]))
+    print(result)
+    say("Yumiakui", "The result is " + str(result), tts)
+
 def open_app(text, tts):
     if (text.find("code") != -1):
         code_thread = threading.Thread(target=open_code)
@@ -138,6 +168,8 @@ def analyse(text, tts):
         os._exit(0)
     elif is_openning(text):
         open_app(text, tts)
+    elif is_computing(text):
+        compute(text, tts)
     elif is_greetings(text):
         say_greetings(tts)
     else :
