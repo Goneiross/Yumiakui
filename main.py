@@ -42,8 +42,6 @@ def open_spotify():
     spotify = '/snap/bin/spotify'
     Popen(spotify)
 
-
-
 def is_greetings(text):
     state = False
     keyword = [
@@ -141,29 +139,29 @@ def compute(text, tts):
     words = convertSentenceToWords(text, 1)
     result = operators[words[1]](int(words[0]),int(words[2]))
     print(result)
-    say("Yumiakui", "The result is " + str(result), tts)
+    say(ASSISTANT_NAME, "The result is " + str(result), tts)
 
 def open_app(text, tts):
     if (text.find("code") != -1):
         code_thread = threading.Thread(target=open_code)
         code_thread.start()
-        say("Yumiakui", "Opening Visual Studio Code", tts)
+        say(ASSISTANT_NAME, "Opening Visual Studio Code", tts)
     elif (text.find("Firefox") != -1):
         firefox_thread = threading.Thread(target=open_firefox)
         firefox_thread.start()
-        say("Yumiakui", "Opening Firefox", tts)
+        say(ASSISTANT_NAME, "Opening Firefox", tts)
     elif (text.find("Matlab") != -1):
         matlab_thread = threading.Thread(target=open_matlab)
         matlab_thread.start()
-        say("Yumiakui", "Opening Matlab", tts)
+        say(ASSISTANT_NAME, "Opening Matlab", tts)
     elif (text.find("xournal") != -1):
         xournal_thread = threading.Thread(target=open_xournal)
         xournal_thread.start()
-        say("Yumiakui", "Opening Xournal", tts)
+        say(ASSISTANT_NAME, "Opening Xournal", tts)
     elif (text.find("Spotify") != -1):
         spotify_thread = threading.Thread(target=open_spotify)
         spotify_thread.start()
-        say("Yumiakui", "Opening Spotify", tts)
+        say(ASSISTANT_NAME, "Opening Spotify", tts)
 
 def analyse(text, tts):
     if is_leaving(text):
