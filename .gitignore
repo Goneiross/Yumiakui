@@ -2,3 +2,6 @@ __pycache__
 test.py
 output.wav
 ibm-credentials.env
+IBM_api.py
+google_calandar_api_credentials.json
+token.pickle
