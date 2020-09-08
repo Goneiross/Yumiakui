@@ -38,3 +38,7 @@ askingHowAreYou = [
     "Watcha doing ?",
     "How is today going on ?"
 ]
+
+credo = [
+    "En todo amar e serveer"
+]

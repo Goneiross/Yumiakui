@@ -127,6 +127,16 @@ def is_studying(text):
             state = True
     return state
 
+def is_polite(text):
+    state = False
+    keyword = [
+        "please"
+    ]
+    for word in keyword:
+        if ((text.lower()).find(word.lower()) != -1):
+            state = True
+    return state
+
 def say_greetings(tts):
     post = ""
     r = random.randrange(0, len(greetings))
@@ -167,6 +177,12 @@ def compute(text, tts):
     result = operators[words[1]](int(words[0]),int(words[2]))
     print(result)
     say(ASSISTANT_NAME, "The result is " + str(result), tts)
+
+def be_humble(tts):
+    r = random.randrange(0, 1)
+    if (r == 0):
+        r = random.randrange(0, len(credo))
+        say(ASSISTANT_NAME, credo[r], tts)
 
 def open_app(text, tts):
     if ((text.lower()).find("code") != -1):
@@ -223,6 +239,8 @@ def analyse(text, tts):
         say_greetings(tts)
     else :
         say_notUnderstood(tts)
+    if is_polite(text):
+        be_humble(tts)
 
 def main():
     r = sr.Recognizer()
