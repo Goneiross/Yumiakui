@@ -10,10 +10,10 @@ from subprocess import DEVNULL, STDOUT, check_call
 TTS_NAME = "watson"
 
 def watson_initialization():
-    f = open("IBM_key", "r")
+    f = open(join(dirname(__file__), "data/", "credentials/", "IBM_key"), "r")
     IMB_KEY = f.readline()
     f.close()
-    f = open("IBM_url", "r")
+    f = open(join(dirname(__file__), "data/", "credentials/", "IBM_url"), "r")
     IMB_URL = f.readline()
     f.close()
     authenticator = IAMAuthenticator(IMB_KEY)
@@ -36,14 +36,14 @@ def tts_init():
 
 def say(name, text, tts):
     print(name + " : " + text)
-    if os.path.exists(text + ".wav"):
-        check_call(['play', text + ".wav"], stdout=DEVNULL, stderr=STDOUT)
+    if os.path.exists(join(dirname(__file__), "data/", "speech/", text + ".wav")):
+        check_call(['play', join(dirname(__file__), "data/", "speech/", text + ".wav")], stdout=DEVNULL, stderr=STDOUT)
     else:
         if (TTS_NAME == "watson"):   
-            with open(join(dirname(__file__), text + ".wav"),'wb') as audio_file:
+            with open(join(dirname(__file__), "data/", "speech/", text + ".wav"),'wb') as audio_file:
                 response = tts.synthesize(text, accept='audio/wav', voice="en-US_AllisonVoice").get_result()
                 audio_file.write(response.content)
-            check_call(['play', text + ".wav"], stdout=DEVNULL, stderr=STDOUT)
+            check_call(['play', join(dirname(__file__), "data/", "speech/", text + ".wav")], stdout=DEVNULL, stderr=STDOUT)
         elif (TTS_NAME == "pytts"):
             tts.say(text)
             tts.runAndWait()
