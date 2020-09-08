@@ -36,23 +36,16 @@ def tts_init():
 
 def say(name, text, tts):
     print(name + " : " + text)
-    if (TTS_NAME == "watson"):   
-        try:
-            with open(join(dirname(__file__), 'output.wav'),'wb') as audio_file:
+    if os.path.exists(text + ".wav"):
+        check_call(['play', text + ".wav"], stdout=DEVNULL, stderr=STDOUT)
+    else:
+        if (TTS_NAME == "watson"):   
+            with open(join(dirname(__file__), text + ".wav"),'wb') as audio_file:
                 response = tts.synthesize(text, accept='audio/wav', voice="en-US_AllisonVoice").get_result()
                 audio_file.write(response.content)
-            check_call(['play', 'output.wav'], stdout=DEVNULL, stderr=STDOUT)
-            pass
-        except:
-            print("ERROR - WATSON TTS")
-            pass
-    elif (TTS_NAME == "pytts"):
-        try:
+            check_call(['play', text + ".wav"], stdout=DEVNULL, stderr=STDOUT)
+        elif (TTS_NAME == "pytts"):
             tts.say(text)
             tts.runAndWait()
-            pass
-        except:
-            print("ERROR - PYTTS")
-            pass
-    else:
-        print("ERROR - WRONG TTS")
+        else:
+            print("ERROR - WRONG TTS")
