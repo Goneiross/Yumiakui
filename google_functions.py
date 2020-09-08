@@ -46,5 +46,3 @@ def google_calandar():
         start = event['start'].get('dateTime', event['start'].get('date'))
         # print(start, event['summary'])
     return event['summary']
-
-google_calandar()

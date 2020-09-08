@@ -14,7 +14,7 @@ leaving = [
     "See ya",
     "See you space-cowboy",
     "Bye",
-    "Byebye",
+    "Bye-bye",
     "See you later",
     "Later bro"
 ]
