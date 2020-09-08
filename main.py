@@ -7,19 +7,13 @@ from subprocess import Popen
 import threading
 
 from dictionary import *
+from tts import *
 
 def convertSentenceToWords(text, index): 
     words = text.split()
     for i in range (0, index):
         words.pop(0)
     return  words
-
-def say(name, text, tts):
-    print(name + " : " + text)
-    # os.system('/opt/mimic/mimic -t ' + text + ' -voice slt' + ' -o tmp.wav')
-    # playsound('tmp.wav')
-    tts.say(text)
-    tts.runAndWait()
 
 def open_code():
     code = '/usr/share/code/bin/code'
@@ -116,7 +110,7 @@ def say_greetings(tts):
     response = greetings[r] + post
     say(ASSISTANT_NAME, response, tts)
     if (r3  == 0):
-        say_askingHowAreYou(tts)
+        say_askingHowAreYou()
 
 def say_askingHowAreYou(tts):
     r = random.randrange(0, len(askingHowAreYou))
@@ -192,9 +186,9 @@ def analyse(text, tts):
 def main():
     r = sr.Recognizer()
     mic = sr.Microphone()
-    tts = pyttsx3.init()
-    tts.setProperty("rate", 180)
+    tts = tts_init()
     os.system('clear')
+    say("Watson", "Initialized", tts)
     while(1) :
         with mic as source:
             r.adjust_for_ambient_noise(source)
@@ -202,11 +196,14 @@ def main():
             try:
                 sentence = r.recognize_google(audio)
                 print(USER_NAME + " : " + sentence)
-                analyse(sentence, tts)
+                try: 
+                    analyse(sentence, tts)
+                    pass
+                except:
+                    print(USER_NAME + " : ERROR Unable to analyse")
                 pass
             except:
                 print(USER_NAME + " : ERROR Voice unrecognized")
                 pass
-
 if __name__ == "__main__":
     main()
