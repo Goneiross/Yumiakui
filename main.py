@@ -41,6 +41,18 @@ def open_spotify():
     spotify = '/snap/bin/spotify'
     Popen(spotify)
 
+def open_discord():
+    spotify = '/usr/bin/discord'
+    Popen(spotify)
+
+def open_steam():
+    spotify = '~/.steam/ubuntu12_32'
+    Popen(spotify)
+
+def open_deluge():
+    spotify = '/usr/bin/deluge'
+    Popen(spotify)
+
 def is_greetings(text):
     state = False
     keyword = [
@@ -151,6 +163,18 @@ def open_app(text, tts):
         spotify_thread = threading.Thread(target=open_spotify)
         spotify_thread.start()
         say(ASSISTANT_NAME, "Opening Spotify", tts)
+    elif ((text.lower()).find("discord") != -1):
+        spotify_thread = threading.Thread(target=open_discord)
+        spotify_thread.start()
+        say(ASSISTANT_NAME, "Opening Discord", tts)
+    elif ((text.lower()).find("steam") != -1):
+        spotify_thread = threading.Thread(target=open_steam)
+        spotify_thread.start()
+        say(ASSISTANT_NAME, "Opening Steam", tts)
+    elif ((text.lower()).find("Deluge") != -1):
+        spotify_thread = threading.Thread(target=open_deluge)
+        spotify_thread.start()
+        say(ASSISTANT_NAME, "Opening deluge", tts)
 
 def analyse(text, tts):
     if is_leaving(text):
