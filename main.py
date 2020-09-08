@@ -53,7 +53,8 @@ def is_asking_nextEvent(text):
     keyword = [
         "event",
         "events",
-        "timetable"
+        "timetable",
+        "class"
     ]
     for word in keyword:
         if ((text.lower()).find(word.lower()) != -1):
