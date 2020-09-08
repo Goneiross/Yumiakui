@@ -210,7 +210,7 @@ def main():
     say("Watson", "Initialized", tts)
     while(1) :
         with mic as source:
-            r.adjust_for_ambient_noise(source)
+            # r.adjust_for_ambient_noise(source)
             audio = r.listen(source)
             try:
                 sentence = r.recognize_google(audio)
