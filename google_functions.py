@@ -33,9 +33,9 @@ def google_calandar():
     service = build('calendar', 'v3', credentials=creds)
 
     now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time 
-    print('Getting the upcoming 2 events')
+    print('Getting the upcoming 1 events')
     events_result = service.events().list(calendarId=CALANDAR_EPFL, timeMin=now,
-                                        maxResults=2, singleEvents=True,
+                                        maxResults=1, singleEvents=True,
                                         orderBy='startTime').execute()
     events = events_result.get('items', [])
 
@@ -43,6 +43,7 @@ def google_calandar():
         print('No upcoming events found.')
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
-        print(start, event['summary'])
-    return start
-calandar()
+        # print(start, event['summary'])
+    return event['summary']
+
+google_calandar()

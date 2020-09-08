@@ -8,6 +8,7 @@ import threading
 
 from dictionary import *
 from tts import *
+from google_functions import *
 
 def convertSentenceToWords(text, index): 
     words = text.split()
@@ -46,6 +47,18 @@ def open_steam():
 def open_deluge():
     spotify = '/usr/bin/deluge'
     Popen(spotify)
+
+def is_asking_nextEvent(text):
+    state = False
+    keyword = [
+        "event",
+        "events",
+        "timetable"
+    ]
+    for word in keyword:
+        if ((text.lower()).find(word.lower()) != -1):
+            state = True
+    return state
 
 def is_greetings(text):
     state = False
@@ -124,6 +137,10 @@ def say_notUnderstood(tts):
     r = random.randrange(0, len(notUnderstood))
     say(ASSISTANT_NAME, notUnderstood[r], tts)
 
+def say_nextEvent(tts):
+    nextEvent = google_calandar()
+    say(ASSISTANT_NAME, nextEvent, tts)
+
 def compute(text, tts):
     operators = {
         '-': lambda a, b: a-b,
@@ -178,6 +195,8 @@ def analyse(text, tts):
         open_app(text, tts)
     elif is_computing(text):
         compute(text, tts)
+    elif is_asking_nextEvent(text):
+        say_nextEvent(tts)
     elif is_greetings(text):
         say_greetings(tts)
     else :
