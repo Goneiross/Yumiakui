@@ -5,10 +5,13 @@ from playsound import playsound
 import random
 from subprocess import Popen
 import threading
+import time
 
 from dictionary import *
 from tts import *
 from google_functions import *
+
+studies_tracker = []
 
 def convertSentenceToWords(text, index): 
     words = text.split()
@@ -113,6 +116,17 @@ def is_computing(text):
             state = True
     return state
 
+def is_studying(text):
+    state = False
+    keyword = [
+        "study",
+        "studies"
+    ]
+    for word in keyword:
+        if ((text.lower()).find(word.lower()) != -1):
+            state = True
+    return state
+
 def say_greetings(tts):
     post = ""
     r = random.randrange(0, len(greetings))
@@ -188,6 +202,11 @@ def open_app(text, tts):
         spotify_thread.start()
         say(ASSISTANT_NAME, "Opening deluge", tts)
 
+def track_studying(tts):
+    say(ASSISTANT_NAME, "Starting the tracking of study time. Good luck !", tts)
+    studies_tracker.append([])
+    studies_tracker[-1].append(time.localtime())
+
 def analyse(text, tts):
     if is_leaving(text):
         say_leaving(tts)
@@ -196,6 +215,8 @@ def analyse(text, tts):
         open_app(text, tts)
     elif is_computing(text):
         compute(text, tts)
+    elif is_studying(text):
+        track_studying(tts)
     elif is_asking_nextEvent(text):
         say_nextEvent(tts)
     elif is_greetings(text):
