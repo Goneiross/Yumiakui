@@ -1,10 +1,9 @@
 import speech_recognition as sr
-import pyttsx3
-import os
+from os import system, _exit
 from playsound import playsound
-import random
-import threading
-import time
+from random import randrange
+from threading import Thread
+from time import localtime
 
 from utilities import *
 from dictionary import *
@@ -33,7 +32,7 @@ class Assistant_Session:
         # Initialize user's personality
         self.user_polite = 0 
 
-        os.system('clear')
+        system('clear')
         say("Watson", "Initialized", self.tts)
 
     def update_user_states(self, text):
@@ -104,7 +103,7 @@ class Assistant_Session:
             self.user_is_leaving = False
             understood = True
             say_leaving(self.tts)
-            os._exit(0)
+            _exit(0)
         if not understood:
             say_notUnderstood(self.tts)
 
@@ -116,11 +115,11 @@ def say_greetings(tts):
     Parameters: tts (TextToSpeech)
     """
     post = ""
-    r = random.randrange(0, len(greetings))
-    r2 = random.randrange(0, 2)
-    r3 = random.randrange(0, 4)
+    r = randrange(0, len(greetings))
+    r2 = randrange(0, 2)
+    r3 = randrange(0, 4)
     if (r2 == 0):
-        r2r = random.randrange(0, len(userName))
+        r2r = randrange(0, len(userName))
         post = ", " + userName[r2r]
     response = greetings[r] + post
     say(ASSISTANT_NAME, response, tts)
@@ -133,7 +132,7 @@ def say_askingHowAreYou(tts):
 
     Parameters: tts (TextToSpeech)
     """
-    r = random.randrange(0, len(askingHowAreYou))
+    r = randrange(0, len(askingHowAreYou))
     say(ASSISTANT_NAME, askingHowAreYou[r], tts)
 
 def say_leaving(tts):
@@ -143,7 +142,7 @@ def say_leaving(tts):
 
     Parameters: tts (TextToSpeech)
     """
-    r = random.randrange(0, len(leaving))
+    r = randrange(0, len(leaving))
     say(ASSISTANT_NAME, leaving[r], tts)
 
 def say_notUnderstood(tts):
@@ -152,7 +151,7 @@ def say_notUnderstood(tts):
 
     Parameters: tts (TextToSpeech)
     """
-    r = random.randrange(0, len(notUnderstood))
+    r = randrange(0, len(notUnderstood))
     say(ASSISTANT_NAME, notUnderstood[r], tts)
 
 def say_nextEvent(tts):
@@ -188,9 +187,9 @@ def be_humble(tts):
 
     Parameters: tts (TextToSpeech)
     """
-    r = random.randrange(0, 1)
+    r = randrange(0, 1)
     if (r == 0):
-        r = random.randrange(0, len(credo))
+        r = randrange(0, len(credo))
         say(ASSISTANT_NAME, credo[r], tts)
 
 def open_app(text, tts):
@@ -200,35 +199,35 @@ def open_app(text, tts):
     Parameters: text (string): user's speech, tts (TextToSpeech)
     """
     if ((text.lower()).find("code") != -1):
-        code_thread = threading.Thread(target=open_code)
+        code_thread = Thread(target=open_code)
         code_thread.start()
         say(ASSISTANT_NAME, "Opening Visual Studio Code", tts)
     elif ((text.lower()).find("firefox") != -1):
-        firefox_thread = threading.Thread(target=open_firefox)
+        firefox_thread = Thread(target=open_firefox)
         firefox_thread.start()
         say(ASSISTANT_NAME, "Opening Firefox", tts)
     elif ((text.lower()).find("matlab") != -1):
-        matlab_thread = threading.Thread(target=open_matlab)
+        matlab_thread = Thread(target=open_matlab)
         matlab_thread.start()
         say(ASSISTANT_NAME, "Opening Matlab", tts)
     elif ((text.lower()).find("xournal") != -1):
-        xournal_thread = threading.Thread(target=open_xournal)
+        xournal_thread = Thread(target=open_xournal)
         xournal_thread.start()
         say(ASSISTANT_NAME, "Opening Xournal", tts)
     elif ((text.lower()).find("spotify") != -1):
-        spotify_thread = threading.Thread(target=open_spotify)
+        spotify_thread = Thread(target=open_spotify)
         spotify_thread.start()
         say(ASSISTANT_NAME, "Opening Spotify", tts)
     elif ((text.lower()).find("discord") != -1):
-        spotify_thread = threading.Thread(target=open_discord)
+        spotify_thread = Thread(target=open_discord)
         spotify_thread.start()
         say(ASSISTANT_NAME, "Opening Discord", tts)
     elif ((text.lower()).find("steam") != -1):
-        spotify_thread = threading.Thread(target=open_steam)
+        spotify_thread = Thread(target=open_steam)
         spotify_thread.start()
         say(ASSISTANT_NAME, "Opening Steam", tts)
     elif ((text.lower()).find("Deluge") != -1):
-        spotify_thread = threading.Thread(target=open_deluge)
+        spotify_thread = Thread(target=open_deluge)
         spotify_thread.start()
         say(ASSISTANT_NAME, "Opening deluge", tts)
 
@@ -240,7 +239,7 @@ def track_studying(tts):
     """
     say(ASSISTANT_NAME, "Starting the tracking of study time. Good luck !", tts)
     studies_tracker.append([])
-    studies_tracker[-1].append(time.localtime())
+    studies_tracker[-1].append(localtime())
 
 def main():
     recognizer = sr.Recognizer()

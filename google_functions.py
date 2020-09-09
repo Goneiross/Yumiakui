@@ -1,8 +1,7 @@
 from __future__ import print_function
 import datetime
 import pickle
-import os.path
-from os.path import join, dirname
+from os.path import join, dirname, exists
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
@@ -19,7 +18,7 @@ def google_init():
     Returns: creds (Credentials)
     """
     creds = None
-    if os.path.exists(join(dirname(__file__), "data/", "credentials/", 'token.pickle')):
+    if exists(join(dirname(__file__), "data/", "credentials/", 'token.pickle')):
         with open(join(dirname(__file__), "data/", "credentials/", 'token.pickle'), 'rb') as token:
             creds = pickle.load(token)
     if not creds or not creds.valid:

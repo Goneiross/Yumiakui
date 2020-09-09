@@ -1,9 +1,8 @@
 from ibm_watson import TextToSpeechV1
 from ibm_watson.websocket import SynthesizeCallback
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
-from os.path import join, dirname
-
-import os
+from os.path import join, dirname, exists
+import pyttsx3
 
 from subprocess import DEVNULL, STDOUT, check_call
 
@@ -56,7 +55,7 @@ def say(name, text, tts):
     Parameters: name (string): name of the AI to print it, text (string): sentence to say, tts (TextToSpeech)
     """
     print(name + " : " + text)
-    if os.path.exists(join(dirname(__file__), "data/", "speech/", text + ".wav")):
+    if exists(join(dirname(__file__), "data/", "speech/", text + ".wav")):
         check_call(['play', join(dirname(__file__), "data/", "speech/", text + ".wav")], stdout=DEVNULL, stderr=STDOUT)
     else:
         if (TTS_NAME == "watson"):   
