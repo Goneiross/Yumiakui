@@ -30,13 +30,19 @@ class Assistant_Session:
         self.user_is_studying = False
         self.user_is_studying_started = False
         self.user_is_studying_stopped = False
-        # Initialize user's personnality
+        # Initialize user's personality
         self.user_polite = 0 
 
         os.system('clear')
         say("Watson", "Initialized", self.tts)
 
     def update_user_states(self, text):
+        """
+        Given the user speech, updates user_state flags. Uses words and expressions, from dictionary.py. 
+        AI personality should also be updated here.
+
+        Parameters: text (string): user's speech
+        """
         # States
         if is_asking_nextEvent(text):
             self.user_is_asking_nextEvent = True
@@ -55,13 +61,16 @@ class Assistant_Session:
             else:
                 self.user_is_studying = True
             
-        # Personnality
+        # personality
         if is_polite(text):
             self.user_polite += 1
 
     def act(self, text):
         """
-        Given user_state flags, choose how the AI should react and organize her response.
+        Given user_state flags, chooses how the AI should react and organize her response.
+        Personality is also taken into account for responses.
+
+        Parameters: text (string): user's speech
         """
         speech = ""
         understood = False
@@ -100,6 +109,12 @@ class Assistant_Session:
             say_notUnderstood(self.tts)
 
 def say_greetings(tts):
+    """
+    The AI greets the user. Randomly takes words/expression from dictionary.
+    Might randomly ask how the user is doing.
+
+    Parameters: tts (TextToSpeech)
+    """
     post = ""
     r = random.randrange(0, len(greetings))
     r2 = random.randrange(0, 2)
@@ -113,22 +128,49 @@ def say_greetings(tts):
         say_askingHowAreYou()
 
 def say_askingHowAreYou(tts):
+    """
+    The AI asks how the user is doing. Randomly takes words/expression from dictionary.
+
+    Parameters: tts (TextToSpeech)
+    """
     r = random.randrange(0, len(askingHowAreYou))
     say(ASSISTANT_NAME, askingHowAreYou[r], tts)
 
 def say_leaving(tts):
+    """
+    The AI says bye. Randomly takes words/expression from dictionary.
+    Then, exit() should be call after the function.
+
+    Parameters: tts (TextToSpeech)
+    """
     r = random.randrange(0, len(leaving))
     say(ASSISTANT_NAME, leaving[r], tts)
 
 def say_notUnderstood(tts):
+    """
+    The AI doesn't understand and might ask to repeat. Randomly takes words/expression from dictionary.
+
+    Parameters: tts (TextToSpeech)
+    """
     r = random.randrange(0, len(notUnderstood))
     say(ASSISTANT_NAME, notUnderstood[r], tts)
 
 def say_nextEvent(tts):
+    """
+    The AI gives next event from google calendar, from google_functions.py.
+
+    Parameters: tts (TextToSpeech)
+    """
     nextEvent = google_calandar()
     say(ASSISTANT_NAME, nextEvent, tts)
 
 def compute(text, tts):
+    """
+    The AI returns the result of the computation.
+    Detects "+" "-" "*" and "/".
+
+    Parameters: text (string): user's speech, tts (TextToSpeech)
+    """
     operators = {
         '-': lambda a, b: a-b,
         '+': lambda a, b: a+b,
@@ -141,12 +183,22 @@ def compute(text, tts):
     say(ASSISTANT_NAME, "The result is " + str(result), tts)
 
 def be_humble(tts):
+    """
+    Easter egg. But works as personality traits for the AI.
+
+    Parameters: tts (TextToSpeech)
+    """
     r = random.randrange(0, 1)
     if (r == 0):
         r = random.randrange(0, len(credo))
         say(ASSISTANT_NAME, credo[r], tts)
 
 def open_app(text, tts):
+    """
+    Open an external app in a new thread. Target can be found in utilities.py.
+
+    Parameters: text (string): user's speech, tts (TextToSpeech)
+    """
     if ((text.lower()).find("code") != -1):
         code_thread = threading.Thread(target=open_code)
         code_thread.start()
@@ -181,6 +233,11 @@ def open_app(text, tts):
         say(ASSISTANT_NAME, "Opening deluge", tts)
 
 def track_studying(tts):
+    """
+    Start the tracking of the study time, with a word from the AI.
+
+    Parameters: tts (TextToSpeech)
+    """
     say(ASSISTANT_NAME, "Starting the tracking of study time. Good luck !", tts)
     studies_tracker.append([])
     studies_tracker[-1].append(time.localtime())
@@ -211,6 +268,6 @@ def main():
             except:
                 print(ASSISTANT_NAME + " : ERROR Voice unrecognized")
                 pass
-            
+
 if __name__ == "__main__":
     main()

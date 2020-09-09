@@ -13,6 +13,11 @@ from data.credentials.google_calandar_ids import *
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
 def google_init():
+    """
+    Initialize google API.
+
+    Returns: creds (Credentials)
+    """
     creds = None
     if os.path.exists(join(dirname(__file__), "data/", "credentials/", 'token.pickle')):
         with open(join(dirname(__file__), "data/", "credentials/", 'token.pickle'), 'rb') as token:
@@ -29,6 +34,11 @@ def google_init():
     return creds
 
 def google_calandar():
+    """
+    Get and give users next events on given calendar. Gets the calendar names from /data/credentials/google_calendar_ids.py.
+
+    Returns: event (string): next event on the calendar
+    """
     creds = google_init() # SHOULD ONLY BE INIT ONCE ## TO DO
 
     service = build('calendar', 'v3', credentials=creds)

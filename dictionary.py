@@ -44,6 +44,13 @@ credo = [
 ]
 
 def is_asking_nextEvent(text):
+    """
+    Checks if user is asking for next event.
+
+    Parameters: text (string): user's speech
+
+    Returns: (bool)
+    """
     state = False
     keyword = [
         "event",
@@ -57,6 +64,13 @@ def is_asking_nextEvent(text):
     return state
 
 def is_greetings(text):
+    """
+    Checks if user is saying hi.
+
+    Parameters: text (string): user's speech
+
+    Returns: (bool)
+    """
     state = False
     keyword = [
         "hey", 
@@ -72,6 +86,13 @@ def is_greetings(text):
     return state
 
 def is_leaving(text):
+    """
+    Checks if user is leaving.
+
+    Parameters: text (string): user's speech
+
+    Returns: (bool)
+    """
     state = False
     keyword = [
         "exit", 
@@ -86,6 +107,13 @@ def is_leaving(text):
     return state
 
 def is_opening_ext_app(text):
+    """
+    Checks if user wants to open an app.
+
+    Parameters: text (string): user's speech
+
+    Returns: (bool)
+    """
     state = False
     keyword = [
         "open", 
@@ -98,6 +126,13 @@ def is_opening_ext_app(text):
     return state
 
 def is_computing(text):
+    """
+    Checks if user wants to compute something.
+
+    Parameters: text (string): user's speech
+
+    Returns: (bool)
+    """
     state = False
     keyword = [
         "compute", 
@@ -109,6 +144,13 @@ def is_computing(text):
     return state
 
 def is_studying(text):
+    """
+    Checks if user starts or stops studying.
+
+    Parameters: text (string): user's speech
+
+    Returns: (bool)
+    """
     state = False
     keyword = [
         "study",
@@ -120,6 +162,13 @@ def is_studying(text):
     return state
 
 def is_polite(text):
+    """
+    Checks if the user is polite. For AI personality purpose.
+
+    Parameters: text (string): user's speech
+
+    Returns: (bool)
+    """
     state = False
     keyword = [
         "please"

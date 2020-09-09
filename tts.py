@@ -10,6 +10,11 @@ from subprocess import DEVNULL, STDOUT, check_call
 TTS_NAME = "watson"
 
 def watson_initialization():
+    """
+    Initialize Watson, IBM TTS API.
+
+    Returns: watson (TextToSpeech)
+    """
     f = open(join(dirname(__file__), "data/", "credentials/", "IBM_key"), "r")
     IMB_KEY = f.readline()
     f.close()
@@ -22,11 +27,21 @@ def watson_initialization():
     return watson
 
 def pytts_initialization():
+    """
+    Initialize pyttsx3, open source, using system TTS.
+
+    Returns: pytts (TextToSpeech)
+    """
     pytts = pyttsx3.init()
     pytts.setProperty("rate", 180)
     return pytts
 
 def tts_init():
+    """
+    Initialize choosen TTS.
+
+    Returns: tts (TextToSpeech)
+    """
     if (TTS_NAME == "watson"):
         return watson_initialization()
     elif (TTS_NAME == "pytts"):
@@ -35,6 +50,11 @@ def tts_init():
         print("ERROR - WRONG TTS")
 
 def say(name, text, tts):
+    """
+    Makes the TTS say the given sentence.
+
+    Parameters: name (string): name of the AI to print it, text (string): sentence to say, tts (TextToSpeech)
+    """
     print(name + " : " + text)
     if os.path.exists(join(dirname(__file__), "data/", "speech/", text + ".wav")):
         check_call(['play', join(dirname(__file__), "data/", "speech/", text + ".wav")], stdout=DEVNULL, stderr=STDOUT)
