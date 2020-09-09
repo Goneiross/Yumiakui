@@ -3,139 +3,101 @@ import pyttsx3
 import os
 from playsound import playsound
 import random
-from subprocess import Popen
 import threading
 import time
 
+from utilities import *
 from dictionary import *
 from tts import *
 from google_functions import *
 
 studies_tracker = []
 
-def convertSentenceToWords(text, index): 
-    words = text.split()
-    for i in range (0, index):
-        words.pop(0)
-    return  words
+class Assistant_Session:
+    """
+    Contains all the data of the current session.
+    Is used to analyse user speech, and speak.
+    """
+    def __init__(self):
+        self.tts = tts_init()
 
-def open_code():
-    code = '/usr/share/code/bin/code'
-    Popen(code)
+        # Initialize user's states
+        self.user_is_asking_nextEvent = False
+        self.user_is_computing = False
+        self.user_is_greeting = False
+        self.user_is_leaving = False
+        self.user_is_opening_ext_app = False
+        self.user_is_studying = False
+        self.user_is_studying_started = False
+        self.user_is_studying_stopped = False
+        # Initialize user's personnality
+        self.user_polite = 0 
 
-def open_firefox():
-    firefox = '/usr/lib/firefox-trunk/firefox-trunk'
-    Popen(firefox)
+        os.system('clear')
+        say("Watson", "Initialized", self.tts)
 
-def open_matlab():
-    matlab = '/usr/local/MATLAB/R2020a/bin/matlab'
-    Popen(matlab)
+    def update_user_states(self, text):
+        # States
+        if is_asking_nextEvent(text):
+            self.user_is_asking_nextEvent = True
+        if is_computing(text):
+            self.user_is_computing = True
+        if is_greetings(text):
+            self.user_is_greeting = True
+        if is_leaving(text):
+            self.user_is_leaving = True   
+        if is_opening_ext_app(text):
+            self.user_is_opening_ext_app = True
+        if is_studying(text):
+            if user_is_studying_started:
+                self.user_is_studying_stopped = True
+                self.user_is_studying_started = False
+            else:
+                self.user_is_studying = True
+            
+        # Personnality
+        if is_polite(text):
+            self.user_polite += 1
 
-def open_Xournal():
-    xournal = '/usr/bin/xournalpp'
-    Popen(xournal)
-
-def open_spotify():
-    spotify = '/snap/bin/spotify'
-    Popen(spotify)
-
-def open_discord():
-    spotify = '/usr/bin/discord'
-    Popen(spotify)
-
-def open_steam():
-    spotify = '~/.steam/ubuntu12_32'
-    Popen(spotify)
-
-def open_deluge():
-    spotify = '/usr/bin/deluge'
-    Popen(spotify)
-
-def is_asking_nextEvent(text):
-    state = False
-    keyword = [
-        "event",
-        "events",
-        "timetable",
-        "class"
-    ]
-    for word in keyword:
-        if ((text.lower()).find(word.lower()) != -1):
-            state = True
-    return state
-
-def is_greetings(text):
-    state = False
-    keyword = [
-        "hey", 
-        "hello", 
-        "hi", 
-        "good morning", 
-        "good afternoon", 
-        "greetings"
-    ]
-    for word in keyword:
-        if ((text.lower()).find(word.lower()) != -1):
-            state = True
-    return state
-
-def is_leaving(text):
-    state = False
-    keyword = [
-        "exit", 
-        "quit", 
-        "bye", 
-        "see you", 
-        "see ya"
-    ]
-    for word in keyword:
-        if ((text.lower()).find(word.lower()) != -1):
-            state = True
-    return state
-
-def is_openning(text):
-    state = False
-    keyword = [
-        "open", 
-        "launch",
-        "start"
-    ]
-    for word in keyword:
-        if ((text.lower()).find(word.lower()) != -1):
-            state = True
-    return state
-
-def is_computing(text):
-    state = False
-    keyword = [
-        "compute", 
-        "calculate"
-    ]
-    for word in keyword:
-        if ((text.lower()).find(word.lower()) != -1):
-            state = True
-    return state
-
-def is_studying(text):
-    state = False
-    keyword = [
-        "study",
-        "studies"
-    ]
-    for word in keyword:
-        if ((text.lower()).find(word.lower()) != -1):
-            state = True
-    return state
-
-def is_polite(text):
-    state = False
-    keyword = [
-        "please"
-    ]
-    for word in keyword:
-        if ((text.lower()).find(word.lower()) != -1):
-            state = True
-    return state
+    def act(self, text):
+        """
+        Given user_state flags, choose how the AI should react and organize her response.
+        """
+        speech = ""
+        understood = False
+        if self.user_is_greeting: 
+            self.user_is_greeting = False
+            understood = True
+            say_greetings(self.tts)
+        if self.user_is_studying:
+            self.user_is_studying = False
+            self.user_is_studying_started = True
+            understood = True
+            track_studying(self.tts)
+        if self.user_is_studying_stopped:
+            self.user_is_studying_stopped = False
+            understood = True
+        if self.user_is_asking_nextEvent:
+            self.user_is_asking_nextEvent = False
+            understood = True
+            say_nextEvent(self.tts)
+        if self.user_is_computing:
+            self.user_is_computing = False
+            understood = True
+            compute(text, self.tts)
+        if self.user_is_opening_ext_app:
+            self.user_is_opening_ext_app = False
+            understood = True
+            open_app(text, self.tts)
+        if (self.user_polite > 5):
+            be_humble(self.tts)
+        if self.user_is_leaving:
+            self.user_is_leaving = False
+            understood = True
+            say_leaving(self.tts)
+            os._exit(0)
+        if not understood:
+            say_notUnderstood(self.tts)
 
 def say_greetings(tts):
     post = ""
@@ -223,46 +185,32 @@ def track_studying(tts):
     studies_tracker.append([])
     studies_tracker[-1].append(time.localtime())
 
-def analyse(text, tts):
-    if is_leaving(text):
-        say_leaving(tts)
-        os._exit(0)
-    elif is_openning(text):
-        open_app(text, tts)
-    elif is_computing(text):
-        compute(text, tts)
-    elif is_studying(text):
-        track_studying(tts)
-    elif is_asking_nextEvent(text):
-        say_nextEvent(tts)
-    elif is_greetings(text):
-        say_greetings(tts)
-    else :
-        say_notUnderstood(tts)
-    if is_polite(text):
-        be_humble(tts)
-
 def main():
-    r = sr.Recognizer()
+    recognizer = sr.Recognizer()
     mic = sr.Microphone()
-    tts = tts_init()
-    os.system('clear')
-    say("Watson", "Initialized", tts)
+    session = Assistant_Session()
     while(1) :
         with mic as source:
             # r.adjust_for_ambient_noise(source)
-            audio = r.listen(source)
+            audio = recognizer.listen(source)
             try:
-                sentence = r.recognize_google(audio)
+                sentence = recognizer.recognize_google(audio)
                 print(USER_NAME + " : " + sentence)
                 try: 
-                    analyse(sentence, tts)
+                    session.update_user_states(sentence)
+                    try:
+                        session.act(sentence)
+                        pass
+                    except:
+                        print(ASSISTANT_NAME + " : ERROR Unable to act")
+                        pass
                     pass
                 except:
-                    print(USER_NAME + " : ERROR Unable to analyse")
+                    print(ASSISTANT_NAME + " : ERROR Unable to analyse your voice")
                 pass
             except:
-                print(USER_NAME + " : ERROR Voice unrecognized")
+                print(ASSISTANT_NAME + " : ERROR Voice unrecognized")
                 pass
+            
 if __name__ == "__main__":
     main()
