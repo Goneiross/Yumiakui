@@ -266,6 +266,8 @@ def main():
                 sentence = stt_transcript(stt, audio)
             elif (STT_NAME == "GOOGLE"):
                 sentence = r.recognize_google(audio)
+            elif (STT_NAME == "GOOGLE_CLOUD"):
+                sentence = stt_transcript(r, audio)
             else: 
                 print("ERROR - WRONG STT NAME")
             recog_time = time()

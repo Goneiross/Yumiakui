@@ -18,6 +18,10 @@ def stt_init():
         speech_to_text = SpeechToTextV1(authenticator=authenticator)
         speech_to_text.set_service_url(IMB_URL)
         return speech_to_text
+    elif (STT_NAME == "GOOGLE_CLOUD"):
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=join(dirname(__file__), "data/", "credentials/", "GOOGLE_STT_key.JSON")
+    else: 
+        print("ERROR - WRONG STT NAME")
 
 def stt_transcript(stt, audioSource):
     if (STT_NAME == "IBM"):
@@ -32,3 +36,7 @@ def stt_transcript(stt, audioSource):
             pass
         print(r)
         return (r)
+    elif (STT_NAME == "GOOGLE_CLOUD"):
+        return stt.recognize_google_cloud(audioSource, language = 'en-US')
+    else: 
+        print("ERROR - WRONG STT NAME")
