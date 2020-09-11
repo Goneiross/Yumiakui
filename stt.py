@@ -7,6 +7,12 @@ from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 STT_NAME = "GOOGLE"
 
 def stt_init():
+    """
+    Initialize choosen STT.
+    Supports IBM Watson and Google Cloud.
+
+    Returns: stt (SpeechToText)
+    """
     if (STT_NAME == "IBM"):
         f = open(join(dirname(__file__), "data/", "credentials/", "IBM_STT_key"), "r")
         IMB_KEY = f.readline()
@@ -24,6 +30,13 @@ def stt_init():
         print("ERROR - WRONG STT NAME")
 
 def stt_transcript(stt, audioSource):
+    """
+    Recognizes the voice to return a text.
+
+    Parameters: audioSource(Audio)
+
+    Returns: text (string)
+    """
     if (STT_NAME == "IBM"):
         results = stt.recognize(audio=audioSource.get_wav_data(), content_type='audio/wav').get_result()
         print(results)
