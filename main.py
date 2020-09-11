@@ -249,18 +249,18 @@ def main():
     session = Assistant_Session()
     stt = stt_init()
     init_time = time()
-    print("init_time=", init_time - start_time)
+    # print("init_time=", init_time - start_time)
     with mic as source:
         r.adjust_for_ambient_noise(source)
     ajust_time = time()
-    print("ajust_time=", ajust_time - init_time)
+    # print("ajust_time=", ajust_time - init_time)
 
     while(1) :
         start_time = time()
         with mic as source:
             audio = r.listen(source)
             listen_time = time()
-            print("listen_time=", listen_time - start_time)
+            # print("listen_time=", listen_time - start_time)
         try:
             if (STT_NAME == "IBM" ):
                 sentence = stt_transcript(stt, audio)
@@ -271,7 +271,7 @@ def main():
             else: 
                 print("ERROR - WRONG STT NAME")
             recog_time = time()
-            print("recog_time=", recog_time - listen_time)
+            # print("recog_time=", recog_time - listen_time)
             print(USER_NAME + " : " + sentence)
             try: 
                 session.update_user_states(sentence)

@@ -26,6 +26,8 @@ def stt_init():
         return speech_to_text
     elif (STT_NAME == "GOOGLE_CLOUD"):
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=join(dirname(__file__), "data/", "credentials/", "GOOGLE_STT_key.JSON")
+    elif (STT_NAME == "GOOGLE"):
+        pass
     else: 
         print("ERROR - WRONG STT NAME")
 
