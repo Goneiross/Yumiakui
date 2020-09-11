@@ -46,6 +46,10 @@ To use IBM API (you can decide to use another one):
  - IMB_STT_url for the IBM TTS API url
  
  - ibm-credentials.env
+
+ To use Google Cloud API:
+
+ - GOOGLE_STT_key.JSON for the Google Cloud TTS API file
  
  ## Support
  
