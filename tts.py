@@ -6,24 +6,24 @@ import pyttsx3
 
 from subprocess import DEVNULL, STDOUT, check_call
 
-TTS_NAME = "watson"
+TTS_NAME = "IBM"
 
-def watson_initialization():
+def IBM_initialization():
     """
     Initialize Watson, IBM TTS API.
 
-    Returns: watson (TextToSpeech)
+    Returns: watson_IBM (TextToSpeech)
     """
-    f = open(join(dirname(__file__), "data/", "credentials/", "IBM_key"), "r")
+    f = open(join(dirname(__file__), "data/", "credentials/", "IBM_TTS_key"), "r")
     IMB_KEY = f.readline()
     f.close()
-    f = open(join(dirname(__file__), "data/", "credentials/", "IBM_url"), "r")
+    f = open(join(dirname(__file__), "data/", "credentials/", "IBM_TTS_url"), "r")
     IMB_URL = f.readline()
     f.close()
     authenticator = IAMAuthenticator(IMB_KEY)
-    watson = TextToSpeechV1(authenticator=authenticator)
-    watson.set_service_url(IMB_URL)
-    return watson
+    watson_IBM = TextToSpeechV1(authenticator=authenticator)
+    watson_IBM.set_service_url(IMB_URL)
+    return watson_IBM
 
 def pytts_initialization():
     """
@@ -41,8 +41,8 @@ def tts_init():
 
     Returns: tts (TextToSpeech)
     """
-    if (TTS_NAME == "watson"):
-        return watson_initialization()
+    if (TTS_NAME == "IBM"):
+        return IBM_initialization()
     elif (TTS_NAME == "pytts"):
         return pytts_initialization()
     else:
@@ -58,7 +58,7 @@ def say(name, text, tts):
     if exists(join(dirname(__file__), "data/", "speech/", text + ".wav")):
         check_call(['play', join(dirname(__file__), "data/", "speech/", text + ".wav")], stdout=DEVNULL, stderr=STDOUT)
     else:
-        if (TTS_NAME == "watson"):   
+        if (TTS_NAME == "IBM"):   
             with open(join(dirname(__file__), "data/", "speech/", text + ".wav"),'wb') as audio_file:
                 response = tts.synthesize(text, accept='audio/wav', voice="en-US_AllisonVoice").get_result()
                 audio_file.write(response.content)
