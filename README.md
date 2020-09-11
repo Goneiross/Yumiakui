@@ -35,9 +35,15 @@ You need:
  
  - google_calandar_ids.py with your calendar IDs (ex: CALANDAR_main = "primary" )
  
- - IMB_key for the IBM TTS API key
+To use IBM API (you can decide to use another one):
+
+ - IMB_TTS_key for the IBM TTS API key
  
- - IMB_url for the IBM TTS API url
+ - IMB_TTS_url for the IBM TTS API url
+
+ - IMB_STT_key for the IBM TTS API key
+ 
+ - IMB_STT_url for the IBM TTS API url
  
  - ibm-credentials.env
  

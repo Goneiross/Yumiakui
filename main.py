@@ -3,11 +3,12 @@ from os import system, _exit
 from playsound import playsound
 from random import randrange
 from threading import Thread
-from time import localtime
+from time import localtime, time
 
 from utilities import *
 from dictionary import *
 from tts import *
+from stt import *
 from google_functions import *
 
 studies_tracker = []
@@ -242,31 +243,49 @@ def track_studying(tts):
     studies_tracker[-1].append(localtime())
 
 def main():
-    recognizer = sr.Recognizer()
+    start_time = time()
+    r = sr.Recognizer()
     mic = sr.Microphone()
     session = Assistant_Session()
+    stt = stt_init()
+    init_time = time()
+    print("init_time=", init_time - start_time)
+    with mic as source:
+        r.adjust_for_ambient_noise(source)
+    ajust_time = time()
+    print("ajust_time=", ajust_time - init_time)
+
     while(1) :
+        start_time = time()
         with mic as source:
-            # r.adjust_for_ambient_noise(source)
-            audio = recognizer.listen(source)
-            try:
-                sentence = recognizer.recognize_google(audio)
-                print(USER_NAME + " : " + sentence)
-                try: 
-                    session.update_user_states(sentence)
-                    try:
-                        session.act(sentence)
-                        pass
-                    except:
-                        print(ASSISTANT_NAME + " : ERROR Unable to act")
-                        pass
+            audio = r.listen(source)
+            listen_time = time()
+            print("listen_time=", listen_time - start_time)
+        try:
+            if (STT_NAME == "IBM" ):
+                sentence = stt_transcript(stt, audio)
+            elif (STT_NAME == "GOOGLE"):
+                sentence = r.recognize_google(audio)
+            else: 
+                print("ERROR - WRONG STT NAME")
+            recog_time = time()
+            print("recog_time=", recog_time - listen_time)
+            print(USER_NAME + " : " + sentence)
+            try: 
+                session.update_user_states(sentence)
+                try:
+                    session.act(sentence)
                     pass
                 except:
-                    print(ASSISTANT_NAME + " : ERROR Unable to analyse your voice")
+                    print(ASSISTANT_NAME + " : ERROR Unable to act")
+                    pass
                 pass
             except:
-                print(ASSISTANT_NAME + " : ERROR Voice unrecognized")
-                pass
+                print(ASSISTANT_NAME + " : ERROR Unable to analyse your voice")
+            pass
+        except:
+            print(ASSISTANT_NAME + " : ERROR Voice unrecognized")
+            pass
 
 if __name__ == "__main__":
     main()

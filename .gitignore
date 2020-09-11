@@ -1,11 +1,3 @@
 *.wav
 __pycache__
 data/
-google_calandar_api_credentials.json
-google_calandar_ids.py
-IBM_key
-IBM_url
-ibm-credentials.env
-output.wav
-test.py
-token.pickle
