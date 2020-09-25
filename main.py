@@ -164,6 +164,41 @@ def say_nextEvent(tts):
     nextEvent = google_calandar()
     say(ASSISTANT_NAME, nextEvent, tts)
 
+def say_niceDay(tss): # Words should be randomly taken !
+    """
+    The AI wishes a nice day. 
+
+    Parameters: tts (TextToSpeech)
+    """
+    say(ASSISTANT_NAME, "Have a nice day", tts)
+
+def say_timeAndDate(tts):
+    """
+    The AI gives both time and date. 
+
+    Parameters: tts (TextToSpeech)
+    """
+    expression = "It's " + string(time.localtime()) + " the " + string(time.date()) + "."
+    say(ASSISTANT_NAME, expression, tts)
+
+def say_time(tts):
+    """
+    The AI gives current time. 
+
+    Parameters: tts (TextToSpeech)
+    """
+    expression = "It's " + string(time.localtime()) + "."
+    say(ASSISTANT_NAME, expression, tts)
+
+def say_date(tts):
+    """
+    The AI gives current date. 
+
+    Parameters: tts (TextToSpeech)
+    """
+    expression = "We are the " + string(time.date()) + "."
+    say(ASSISTANT_NAME, expression, tts)
+
 def compute(text, tts):
     """
     The AI returns the result of the computation.
@@ -241,6 +276,28 @@ def track_studying(tts):
     say(ASSISTANT_NAME, "Starting the tracking of study time. Good luck !", tts)
     studies_tracker.append([])
     studies_tracker[-1].append(localtime())
+
+def wake_up_routine(tts):
+    """
+    The AI gives the user a summary of his day. 
+    For now, starts on user's demand, should start every day morning.
+    """
+    # Greets the user
+    say_greetings(tts) # Shoudl use special one for morning, asking how the user slept
+
+    # Gives time and date
+    say_timeAndDate(tts)
+
+    # Gives appointment
+
+    # Gives timetable
+
+    # Gives tasks
+
+    # Gives weather forecast
+
+    # Wishes a nice day
+    say_niceDay(tts)
 
 def main():
     start_time = time()
