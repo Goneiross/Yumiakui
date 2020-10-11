@@ -30,6 +30,7 @@ class Assistant_Session:
         self.user_is_studying = False
         self.user_is_studying_started = False
         self.user_is_studying_stopped = False
+        self.user_is_waking_up = False
         # Initialize user's personality
         self.user_polite = 0 
 
@@ -60,7 +61,9 @@ class Assistant_Session:
                 self.user_is_studying_started = False
             else:
                 self.user_is_studying = True
-            
+        if is_waking_up(text):
+            self.user_is_waking_up = True
+
         # personality
         if is_polite(text):
             self.user_polite += 1
@@ -98,6 +101,10 @@ class Assistant_Session:
             self.user_is_opening_ext_app = False
             understood = True
             open_app(text, self.tts)
+        if self.user_is_waking_up: 
+            self.user_is_waking_up = False
+            understood = True
+            wake_up_routine(self.tts)
         if (self.user_polite > 5):
             be_humble(self.tts)
         if self.user_is_leaving:
