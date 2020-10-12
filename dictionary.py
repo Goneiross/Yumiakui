@@ -194,6 +194,6 @@ def is_waking_up():
         "today's plan"
     ]
     for word in keyword:
-    if ((text.lower()).find(word.lower()) != -1):
-        state = True
+        if ((text.lower()).find(word.lower()) != -1):
+            state = True
     return state

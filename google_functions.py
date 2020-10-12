@@ -32,7 +32,7 @@ def google_init():
             pickle.dump(creds, token)
     return creds
 
-def google_calandar(range = "day", max_events = 10, calendar = "CALENDAR_EPFL") {
+def google_calandar(range = "day", max_events = 10, calendar = "CALENDAR_EPFL"):
     """
     Gets and returns next user's events, given parameters.
     By default returns the next 10 events from all the calendars of the current day.
@@ -55,7 +55,7 @@ def google_calandar(range = "day", max_events = 10, calendar = "CALENDAR_EPFL") 
         end_time = (datetime.datetime.now() + datetime.timedelta(weeks=1)).isoformat()
     elif (range == "month"):
         end_time = (datetime.datetime.now() + datetime.timedelta(days=30)).isoformat() # During current month or 30 days ?
-    events_result = service.events().list(calendarId=calendar, timeMin=now, timeMax=end_time
+    events_result = service.events().list(calendarId=calendar, timeMin=now, timeMax=end_time,
                                         maxResults=max_events, singleEvents=True,
                                         orderBy='startTime').execute()
     events = events_result.get('items', [])
@@ -67,5 +67,3 @@ def google_calandar(range = "day", max_events = 10, calendar = "CALENDAR_EPFL") 
         start = event['start'].get('dateTime', event['start'].get('date')) # check this
         # print(start, event['summary'])
     return start + " " + event['summary'] # check this ??
-
-    }
