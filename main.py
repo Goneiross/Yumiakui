@@ -3,7 +3,8 @@ from os import system, _exit
 from playsound import playsound
 from random import randrange
 from threading import Thread
-from time import localtime, time
+from time import time, localtime
+from datetime import date
 
 from utilities import *
 from dictionary import *
@@ -132,7 +133,7 @@ def say_greetings(tts):
     response = greetings[r] + post
     say(ASSISTANT_NAME, response, tts)
     if (r3  == 0):
-        say_askingHowAreYou()
+        say_askingHowAreYou(tts)
 
 def say_askingHowAreYou(tts):
     """
@@ -185,7 +186,8 @@ def say_timeAndDate(tts):
 
     Parameters: tts (TextToSpeech)
     """
-    expression = "It's " + string(time.localtime()) + " the " + string(time.date()) + "."
+    now = localtime()
+    expression = "It's " + str(now.tm_hour) + ":" + str(now.tm_min) + " the " + str(date.today()) + "."
     say(ASSISTANT_NAME, expression, tts)
 
 def say_time(tts):
@@ -194,7 +196,7 @@ def say_time(tts):
 
     Parameters: tts (TextToSpeech)
     """
-    expression = "It's " + string(time.localtime()) + "."
+    expression = "It's " + str(now.hour) + " " + str(now.minute) + "."
     say(ASSISTANT_NAME, expression, tts)
 
 def say_date(tts):
@@ -203,7 +205,7 @@ def say_date(tts):
 
     Parameters: tts (TextToSpeech)
     """
-    expression = "We are the " + string(time.date()) + "."
+    expression = "We are the " + str(date.today()) + "."
     say(ASSISTANT_NAME, expression, tts)
 
 def compute(text, tts):
@@ -325,6 +327,10 @@ def main():
             audio = r.listen(source)
             listen_time = time()
             # print("listen_time=", listen_time - start_time)
+
+        sentence = r.recognize_google(audio)
+        session.update_user_states(sentence)
+        session.act(sentence)
         try:
             if (STT_NAME == "IBM" ):
                 sentence = stt_transcript(stt, audio)
