@@ -178,7 +178,7 @@ def is_polite(text):
             state = True
     return state
 
-def is_waking_up():
+def is_waking_up(text):
     """
     Checks if the user state is waking up. 
 
