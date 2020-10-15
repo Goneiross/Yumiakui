@@ -292,18 +292,10 @@ def wake_up_routine(tts):
     For now, starts on user's demand, should start every day morning.
     """
     # Greets the user
-    say_greetings(tts) # Shoudl use special one for morning, asking how the user slept
+    say_greetings(tts) # Should use special one for morning, asking how the user slept
 
     # Gives time and date
     say_timeAndDate(tts)
-
-    # Gives appointment
-
-    # Gives timetable
-
-    # Gives tasks
-
-    # Gives weather forecast
 
     # Wishes a nice day
     say_niceDay(tts)
