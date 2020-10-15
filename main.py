@@ -319,10 +319,6 @@ def main():
             audio = r.listen(source)
             listen_time = time()
             # print("listen_time=", listen_time - start_time)
-
-        sentence = r.recognize_google(audio)
-        session.update_user_states(sentence)
-        session.act(sentence)
         try:
             if (STT_NAME == "IBM" ):
                 sentence = stt_transcript(stt, audio)
