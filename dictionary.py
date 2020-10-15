@@ -177,3 +177,23 @@ def is_polite(text):
         if ((text.lower()).find(word.lower()) != -1):
             state = True
     return state
+
+def is_waking_up(text):
+    """
+    Checks if the user state is waking up. 
+
+    Parameters: text (string): user's speech
+
+    Returns: (bool)
+    """
+    state = False
+    keyword = [
+        "waking up",
+        "feed",
+        "news",
+        "today's plan"
+    ]
+    for word in keyword:
+        if ((text.lower()).find(word.lower()) != -1):
+            state = True
+    return state

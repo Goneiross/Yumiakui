@@ -32,26 +32,38 @@ def google_init():
             pickle.dump(creds, token)
     return creds
 
-def google_calandar():
+def google_calandar(range = "day", max_events = 10, calendar = "CALENDAR_EPFL"):
     """
-    Get and give users next events on given calendar. Gets the calendar names from /data/credentials/google_calendar_ids.py.
+    Gets and returns next user's events, given parameters.
+    By default returns the next 10 events from all the calendars of the current day.
+ 
+    Parameters: 
+    range(string): can be 'day' or 'week' or 'month', 
+    max_events(int): max number of events to return,
+    calendar(string): the ID of the calendar to use, from /data/credentials/google_calendar_ids.py
 
-    Returns: event (string): next event on the calendar
+    Returns: events(string)
     """
+
     creds = google_init() # SHOULD ONLY BE INIT ONCE ## TO DO
-
     service = build('calendar', 'v3', credentials=creds)
 
-    now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time 
-    print('Getting the upcoming 1 events')
-    events_result = service.events().list(calendarId=CALANDAR_EPFL, timeMin=now,
-                                        maxResults=1, singleEvents=True,
+    now = datetime.datetime.now().isoformat()
+    if (range == "day"):
+        end_time = (datetime.datetime.now() + datetime.timedelta(days=1)).isoformat()
+    elif (range == "week"):
+        end_time = (datetime.datetime.now() + datetime.timedelta(weeks=1)).isoformat()
+    elif (range == "month"):
+        end_time = (datetime.datetime.now() + datetime.timedelta(days=30)).isoformat() # During current month or 30 days ?
+    events_result = service.events().list(calendarId=calendar, timeMin=now, timeMax=end_time,
+                                        maxResults=max_events, singleEvents=True,
                                         orderBy='startTime').execute()
     events = events_result.get('items', [])
 
     if not events:
         print('No upcoming events found.')
+        return " "
     for event in events:
-        start = event['start'].get('dateTime', event['start'].get('date'))
+        start = event['start'].get('dateTime', event['start'].get('date')) # check this
         # print(start, event['summary'])
-    return event['summary']
+    return start + " " + event['summary'] # check this ??

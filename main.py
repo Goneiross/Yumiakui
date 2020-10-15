@@ -3,7 +3,8 @@ from os import system, _exit
 from playsound import playsound
 from random import randrange
 from threading import Thread
-from time import localtime, time
+from time import time, localtime
+from datetime import date
 
 from utilities import *
 from dictionary import *
@@ -30,6 +31,7 @@ class Assistant_Session:
         self.user_is_studying = False
         self.user_is_studying_started = False
         self.user_is_studying_stopped = False
+        self.user_is_waking_up = False
         # Initialize user's personality
         self.user_polite = 0 
 
@@ -60,7 +62,9 @@ class Assistant_Session:
                 self.user_is_studying_started = False
             else:
                 self.user_is_studying = True
-            
+        if is_waking_up(text):
+            self.user_is_waking_up = True
+
         # personality
         if is_polite(text):
             self.user_polite += 1
@@ -98,6 +102,10 @@ class Assistant_Session:
             self.user_is_opening_ext_app = False
             understood = True
             open_app(text, self.tts)
+        if self.user_is_waking_up: 
+            self.user_is_waking_up = False
+            understood = True
+            wake_up_routine(self.tts)
         if (self.user_polite > 5):
             be_humble(self.tts)
         if self.user_is_leaving:
@@ -125,7 +133,7 @@ def say_greetings(tts):
     response = greetings[r] + post
     say(ASSISTANT_NAME, response, tts)
     if (r3  == 0):
-        say_askingHowAreYou()
+        say_askingHowAreYou(tts)
 
 def say_askingHowAreYou(tts):
     """
@@ -163,6 +171,42 @@ def say_nextEvent(tts):
     """
     nextEvent = google_calandar()
     say(ASSISTANT_NAME, nextEvent, tts)
+
+def say_niceDay(tss): # Words should be randomly taken !
+    """
+    The AI wishes a nice day. 
+
+    Parameters: tts (TextToSpeech)
+    """
+    say(ASSISTANT_NAME, "Have a nice day", tts)
+
+def say_timeAndDate(tts):
+    """
+    The AI gives both time and date. 
+
+    Parameters: tts (TextToSpeech)
+    """
+    now = localtime()
+    expression = "It's " + str(now.tm_hour) + ":" + str(now.tm_min) + " the " + str(date.today()) + "."
+    say(ASSISTANT_NAME, expression, tts)
+
+def say_time(tts):
+    """
+    The AI gives current time. 
+
+    Parameters: tts (TextToSpeech)
+    """
+    expression = "It's " + str(now.hour) + " " + str(now.minute) + "."
+    say(ASSISTANT_NAME, expression, tts)
+
+def say_date(tts):
+    """
+    The AI gives current date. 
+
+    Parameters: tts (TextToSpeech)
+    """
+    expression = "We are the " + str(date.today()) + "."
+    say(ASSISTANT_NAME, expression, tts)
 
 def compute(text, tts):
     """
@@ -241,6 +285,20 @@ def track_studying(tts):
     say(ASSISTANT_NAME, "Starting the tracking of study time. Good luck !", tts)
     studies_tracker.append([])
     studies_tracker[-1].append(localtime())
+
+def wake_up_routine(tts):
+    """
+    The AI gives the user a summary of his day. 
+    For now, starts on user's demand, should start every day morning.
+    """
+    # Greets the user
+    say_greetings(tts) # Should use special one for morning, asking how the user slept
+
+    # Gives time and date
+    say_timeAndDate(tts)
+
+    # Wishes a nice day
+    say_niceDay(tts)
 
 def main():
     start_time = time()
